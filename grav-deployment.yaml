@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grav-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grav-site
+  namespace: grav-service
+spec:
+  selector:
+    app: grav-site
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grav-site
+  namespace: grav-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: grav-site
+  template:
+    metadata:
+      labels:
+        app: grav-site
+    spec:
+      containers:
+      - name: grav-site
+        image: opnmind/grav:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
