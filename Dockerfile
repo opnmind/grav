@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 LABEL maintainer="opnmind <opnmind@mailbox.org>"
 
-ENV GRAV_VERSION=1.6.28
+ENV GRAV_VERSION=latest
 
 # Enable Apache Rewrite + Expires Module
 RUN a2enmod rewrite expires && \
@@ -24,12 +24,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-ins
     g++ \
     git \
     cron \
-    vim \
+    wget \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-configure gd \ 
-# --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip \
     && docker-php-ext-install ldap \
@@ -67,9 +68,6 @@ RUN curl -o grav-admin.zip -SL https://getgrav.org/download/core/grav-admin/${GR
 
 WORKDIR /var/www/html
 
-RUN bin/grav clearcache --all
-RUN bin/gpm self-upgrade -y
-RUN bin/grav composer --update
 RUN bin/gpm update -y
 RUN bin/gpm install -y shortcode-ui
 RUN bin/gpm install -y datatables
@@ -81,10 +79,16 @@ RUN (crontab -l; echo "* * * * * cd /var/www/html;/usr/local/bin/php bin/grav sc
 # Return to root user
 USER root
 
-# Copy init scripts
-# COPY docker-entrypoint.sh /entrypoint.sh
-
 # provide container inside image for data persistence
 VOLUME ["/var/www/html"]
+
+EXPOSE 80
+
+HEALTHCHECK \
+    --start-period=10s \
+    --interval=5m \
+    --timeout=3s \
+    --retries=5 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost || exit 1
 
 CMD ["sh", "-c", "cron && apache2-foreground"]
