@@ -23,6 +23,7 @@ jobs:
         run: |
           git config --global user.name '${{ secrets.REPO_USERNAME }}'
           git config --global user.email '${{ secrets.REPO_EMAIL }}'
-          git commit -am "New grav release version $(cat release-versions/grav.txt)"
-          git tag -a grav-$(cat release-versions/grav.txt)
+          git add release-versions/grav.txt
+          git pull --no-commit && git commit -m "New grav release version $(cat release-versions/grav.txt)"
+          git tag -a grav-$(cat release-versions/grav.txt) -m "New grav release version $(cat release-versions/grav.txt)"
           git push origin --tags
