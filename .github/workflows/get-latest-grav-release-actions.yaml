@@ -2,7 +2,7 @@ name: Get latest grav release version
 on:
   schedule:
     - cron:  '5 * * * *'
- workflow_dispatch:
+  workflow_dispatch:
  
 jobs:
   get-version:
