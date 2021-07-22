@@ -13,7 +13,7 @@ jobs:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
       - name: Fetch release version
         run: |
-          gh auth login --with-token < $(echo ${{ secrets.REPO_SCOPED_TOKEN }})
+          gh auth login --with-token < ${{ secrets.REPO_SCOPED_TOKEN }}
           gh release list
           curl -sL https://api.github.com/repos/getgrav/grav/releases/latest | \
           jq -r ".tag_name" > release-versions/grav.txt
