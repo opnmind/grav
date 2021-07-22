@@ -13,7 +13,7 @@ jobs:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
       - name: Fetch release version
         run: |
-          echo ${{ secrets.REPO_SCOPED_TOKEN }} | gh auth login --scopes [repo,read:org] --with-token
+          echo ${{ secrets.REPO_SCOPED_TOKEN }} | gh auth login --with-token
           curl -sL https://api.github.com/repos/getgrav/grav/releases/latest | \
           jq -r ".tag_name" > release-versions/grav.txt
       - name: Check for modified files
