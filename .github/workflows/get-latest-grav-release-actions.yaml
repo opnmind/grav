@@ -25,6 +25,7 @@ jobs:
           git config --global user.email '${{ secrets.REPO_EMAIL }}'
           git add release-versions/grav.txt
           git pull --no-commit && git commit -m "New grav release version $(cat release-versions/grav.txt)"
+          git push origin
           git tag -a grav-$(cat release-versions/grav.txt) -m "New grav release version $(cat release-versions/grav.txt)"
           git push origin --tags
           gh release create grav-$(cat release-versions/grav.txt)
