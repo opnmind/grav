@@ -1,7 +1,7 @@
-# latest Grav Docker Image
+# This repo is archived from now on. 
 
-Grav is a modern open source flat-file CMS
+Docker Hub new decreased the posibilities for auto builds for free accounts. Now I will build and maintain it internally.
 
-```shell
-docker pull opnmind2020/grav:latest
-```
+## latest Grav Docker Image
+
+Grav is a modern open source flat-file CMS.
